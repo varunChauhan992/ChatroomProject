@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 class Room(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    slug = models.SlugField(unique = True, blank = True)
+    slug = models.SlugField(max_length=100, unique=True, blank=True)
     admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name="created_rooms")
     created_at = models.DateTimeField(default=timezone.now)
 
