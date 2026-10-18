@@ -2,185 +2,69 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Active Chatrooms</title>
   {% include 'chat/style_inc.html' %}
-  <style>
-    .dashboard-layout {
-      display: flex;
-      max-width: 1100px;
-      margin: 40px auto;
-      gap: 30px;
-      padding: 0 20px;
-    }
-
-    .main-content {
-      flex: 1;
-      background: #ffffff;
-      border: 3px solid #000000;
-      border-radius: 16px;
-      box-shadow: 6px 6px 0px #000000;
-      padding: 30px;
-    }
-
-    .right-sidebar {
-      width: 280px;
-      background: #ffffff;
-      border: 3px solid #000000;
-      border-radius: 16px;
-      box-shadow: 6px 6px 0px #000000;
-      padding: 25px;
-      height: fit-content;
-    }
-
-    .right-sidebar h3 {
-      font-size: 1.1rem;
-      margin-bottom: 15px;
-      border-bottom: 2px solid #000;
-      padding-bottom: 8px;
-    }
-
-    .sidebar-menu {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .sidebar-menu a, .sidebar-menu button {
-      display: block;
-      text-decoration: none;
-      background: #f4f4f4;
-      color: #000;
-      border: 2px solid #000;
-      padding: 10px 15px;
-      border-radius: 8px;
-      font-weight: 600;
-      text-align: left;
-      cursor: pointer;
-      box-shadow: 3px 3px 0px #000;
-      transition: transform 0.1s, box-shadow 0.1s;
-    }
-
-    .sidebar-menu a:hover, .sidebar-menu button:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 5px 5px 0px #000;
-    }
-
-    .sidebar-menu a.danger-btn {
-      background: #ffc9c9;
-    }
-
-    .sidebar-menu a.primary-btn {
-      background: #ffe066;
-    }
-
-    .room-card-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #fafafa;
-      border: 2px solid #000;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 12px;
-      box-shadow: 3px 3px 0px #000;
-    }
-
-    .room-info h4 {
-      margin: 0 0 5px 0;
-    }
-    
-    .room-info h4 a {
-      text-decoration: none;
-      color: #000;
-    }
-
-    .room-info h4 a:hover {
-      text-decoration: underline;
-    }
-
-    .room-meta {
-      font-size: 0.85rem;
-      color: #555;
-    }
-
-    .badge-active {
-      background: #b2f2bb;
-      border: 2px solid #000;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 0.8rem;
-    }
-  </style>
 </head>
 <body>
 
-  <div class="dashboard-layout">
-    
-    <!-- Main Content: Active Chatrooms -->
-    <div class="main-content">
-      <h2><span>✨</span> Active Chatrooms</h2>
-      <p>Welcome back, <strong>{{ request.user.username }}</strong>!</p>
-      
-      {% if messages %}
+  <div class="app-shell">
+    <div class="dashboard">
+
+      <!-- Main: rooms -->
+      <div class="panel">
+        <h1 class="page-title">Chatrooms</h1>
+        <p class="muted">Welcome back, <strong>{{ request.user.username }}</strong></p>
+
         {% for message in messages %}
-          <div style="background: #b2f2bb; border: 2px solid #000; padding: 10px; margin-bottom: 15px; border-radius: 8px; font-weight: bold;">
-            {{ message }}
-          </div>
+          <div class="flash">{{ message }}</div>
         {% endfor %}
-      {% endif %}
 
-      <hr style="border: 1px solid #000; margin: 20px 0;">
+        {% if rooms_data %}
+          <div class="rooms-grid">
+            {% for item in rooms_data %}
+              <div class="room-card">
+                <div>
+                  <h3><a href="{% url 'room_detail' slug=item.room.slug %}"># {{ item.room.name }}</a></h3>
+                  <span class="room-meta">Admin: {{ item.room.admin.username }}</span>
+                </div>
+                <div class="room-actions">
+                  <span class="badge">{{ item.active_count }} active</span>
+                  <span style="display: flex; gap: 0.5rem;">
+                    <a href="{% url 'room_detail' slug=item.room.slug %}" class="btn btn-sm">Join</a>
+                    {% if item.room.admin == request.user %}
+                      <a href="{% url 'delete_room' slug=item.room.slug %}" class="btn btn-sm btn-danger-soft">Delete</a>
+                    {% endif %}
+                  </span>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="empty">No chatrooms yet. Create one from the panel on the right.</div>
+        {% endif %}
+      </div>
 
-      {% if rooms_data %}
-        <div class="rooms-list">
-          {% for item in rooms_data %}
-            <div class="room-card-item">
-              <div class="room-info">
-                <h4><a href="{% url 'room_detail' slug=item.room.slug %}"># {{ item.room.name }}</a></h4>
-                <span class="room-meta">Admin: <strong>{{ item.room.admin.username }}</strong></span>
-              </div>
-              <div style="display: flex; align-items: center; gap: 15px;">
-                <span class="badge-active">🟢 {{ item.active_count }} active</span>
-                
-                {% if item.room.admin == request.user %}
-                  <a href="{% url 'delete_room' slug=item.room.slug %}" style="background: #ffc9c9; border: 2px solid #000; padding: 5px 10px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; box-shadow: 2px 2px 0px #000;">Delete</a>
-                {% endif %}
-              </div>
-            </div>
-          {% endfor %}
+      <!-- Sidebar -->
+      <div class="panel">
+        <h3 class="side-title">Controls</h3>
+        <div class="side-menu">
+          <a href="{% url 'create_room' %}" class="btn btn-block">Create chatroom</a>
+
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-secondary btn-block">Log out</button>
+          </form>
+
+          <form method="post" action="{% url 'delete_account' %}"
+                onsubmit="return confirm('Delete your account permanently? This cannot be undone.');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger-soft btn-block">Delete account</button>
+          </form>
         </div>
-      {% else %}
-        <p style="text-align: center; color: #666; padding: 30px;">No active chatrooms found. Create one using the sidebar to get started!</p>
-      {% endif %}
+      </div>
+
     </div>
-
-    <!-- Right Sidebar Controls -->
-    <div class="right-sidebar">
-      <h3><span>⚙️</span> Controls</h3>
-      <ul class="sidebar-menu">
-          <li><a href="{% url 'create_room' %}" class="primary-btn">✨ Create Chatroom</a></li>
-
-          <li>
-            <form method="post" action="{% url 'logout' %}">
-              {% csrf_token %}
-              <button type="submit" style="width: 100%;">🚪 Logout</button>
-            </form>
-          </li>
-
-          <li>
-            <form method="post" action="{% url 'delete_account' %}"
-                  onsubmit="return confirm('Delete your account permanently? This cannot be undone.');">
-              {% csrf_token %}
-              <button type="submit" style="width: 100%; background: #ffc9c9;">🗑️ Delete ID</button>
-            </form>
-          </li>
-     </ul>
-    </div>
-
   </div>
 
 </body>

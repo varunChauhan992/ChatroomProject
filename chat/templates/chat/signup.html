@@ -2,29 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sign Up</title>
   {% include 'chat/style_inc.html' %}
 </head>
-<body>
+<body class="center-page">
 
   <div class="auth-card">
-    <h2 class="card-title">
-      <span>✨</span> Sign Up
-    </h2>
+    {% include 'chat/avatar_inc.html' %}
 
     <form method="post" class="auth-form">
       {% csrf_token %}
       {{ form.as_p }}
-
-      <div class="btn-submit-container">
-        <button type="submit" class="btn-submit">
-          <span>✨</span> Create Account
-        </button>
-      </div>
+      <button type="submit" class="btn btn-block">Create account</button>
     </form>
 
     <p class="auth-footer">
-      Already have an account? <a href="{% url 'login' %}">Login here</a>
+      Already have an account? <a href="{% url 'login' %}">Log in</a>
     </p>
   </div>
 

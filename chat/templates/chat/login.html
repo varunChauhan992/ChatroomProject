@@ -2,15 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Login</title>
   {% include 'chat/style_inc.html' %}
 </head>
-<body>
+<body class="center-page">
 
   <div class="auth-card">
-    <h2 class="card-title">
-      <span>✨</span> Login
-    </h2>
+    {% include 'chat/avatar_inc.html' %}
 
     <form method="post" class="auth-form">
       {% csrf_token %}
@@ -22,26 +21,32 @@
       {% endif %}
 
       <p>
-        <label for="id_username">Username</label>
-        <input type="text" name="username" required id="id_username" placeholder="Enter your username">
+        <label for="id_username">Username<span class="req">*</span></label>
+        <input type="text" name="username" required autofocus id="id_username" placeholder="Username" autocomplete="username">
       </p>
 
       <p>
-        <label for="id_password">Password</label>
-        <input type="password" name="password" required id="id_password" placeholder="••••••••">
+        <label for="id_password">Password<span class="req">*</span></label>
+        <input type="password" name="password" required id="id_password" placeholder="Password" autocomplete="current-password">
       </p>
 
-      <div class="btn-submit-container">
-        <button type="submit" class="btn-submit">
-          <span>✨</span> Log In
-        </button>
-      </div>
+      <label class="show-pass">
+        <input type="checkbox" id="show-password"> Show Password
+      </label>
+
+      <button type="submit" class="btn btn-block">Log in</button>
     </form>
 
     <p class="auth-footer">
-      Don't have an account? <a href="{% url 'signup' %}">Sign up here</a>
+      Don't have an account? <a href="{% url 'signup' %}">Sign up</a>
     </p>
   </div>
+
+  <script>
+    document.getElementById('show-password').addEventListener('change', function (e) {
+      document.getElementById('id_password').type = e.target.checked ? 'text' : 'password';
+    });
+  </script>
 
 </body>
 </html>

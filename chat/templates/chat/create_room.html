@@ -2,85 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Create Chatroom</title>
   {% include 'chat/style_inc.html' %}
-  <style>
-    .form-container {
-      max-width: 500px;
-      margin: 60px auto;
-      background: #ffffff;
-      border: 3px solid #000000;
-      border-radius: 16px;
-      box-shadow: 6px 6px 0px #000000;
-      padding: 35px;
-    }
-
-    .form-container h2 {
-      margin-top: 0;
-      font-size: 1.6rem;
-      margin-bottom: 20px;
-    }
-
-    .form-container p {
-      margin-bottom: 15px;
-    }
-
-    .form-container label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    .form-container input[type="text"],
-    .form-container textarea {
-      width: 100%;
-      border: 3px solid #000000;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 1rem;
-      box-shadow: 3px 3px 0px #000000;
-      outline: none;
-      box-sizing: border-box;
-      margin-bottom: 20px;
-    }
-
-    .btn-submit {
-      background: #ffe066;
-      border: 3px solid #000000;
-      padding: 12px 24px;
-      border-radius: 12px;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      box-shadow: 4px 4px 0px #000000;
-      width: 100%;
-      transition: transform 0.1s, box-shadow 0.1s;
-    }
-
-    .btn-submit:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px #000000;
-    }
-
-    .btn-back {
-      display: inline-block;
-      margin-top: 20px;
-      text-decoration: none;
-      color: #000;
-      font-weight: 600;
-    }
-  </style>
 </head>
-<body>
+<body class="center-page">
 
-  <div class="form-container">
-    <h2>✨ Create a New Chatroom</h2>
-    <form method="post">
+  <div class="auth-card wide">
+    <h2 class="card-title">Create a new chatroom</h2>
+
+    <form method="post" class="auth-form">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit" class="btn-submit">Create Room</button>
+      <button type="submit" class="btn btn-block">Create room</button>
     </form>
-    <a href="{% url 'rooms_list' %}" class="btn-back">⬅️ Back to Chatrooms</a>
+
+    <p class="auth-footer">
+      <a href="{% url 'rooms_list' %}">&larr; Back to chatrooms</a>
+    </p>
   </div>
 
 </body>
