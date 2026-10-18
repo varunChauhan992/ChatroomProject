@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+  {% include 'chat/style_inc.html' %}
+</head>
+<body>
+
+  <div class="auth-card">
+    <h2 class="card-title">
+      <span>✨</span> Sign Up
+    </h2>
+
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <div class="btn-submit-container">
+        <button type="submit" class="btn-submit">
+          <span>✨</span> Create Account
+        </button>
+      </div>
+    </form>
+
+    <p class="auth-footer">
+      Already have an account? <a href="{% url 'login' %}">Login here</a>
+    </p>
+  </div>
+
+</body>
+</html>

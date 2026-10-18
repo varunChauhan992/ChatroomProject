@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Delete Room</title>
+  {% include 'chat/style_inc.html' %}
+</head>
+<body>
+
+  <div class="auth-card" style="border-color: #d90429;">
+    <h2 class="card-title" style="color: #d90429;">
+      <span>⚠️</span> Delete Room
+    </h2>
+
+    <p style="margin: 20px 0; font-size: 1.05rem;">
+      Are you sure you want to permanently delete the room <strong>#{{ room.name }}</strong>? This action cannot be undone and will disconnect all active users.
+    </p>
+
+    <form method="post">
+      {% csrf_token %}
+      <div style="display: flex; gap: 15px; margin-top: 25px;">
+        <button type="submit" style="flex: 1; background: #ffc9c9; color: #000; border: 3px solid #000; padding: 14px; border-radius: 12px; font-weight: bold; font-size: 1rem; box-shadow: 4px 4px 0px #000; cursor: pointer;">
+          Yes, Delete Room
+        </button>
+        <a href="{% url 'rooms_list' %}" style="display: flex; align-items: center; justify-content: center; flex: 1; background: #fff; border: 3px solid #000; padding: 14px; border-radius: 12px; text-decoration: none; color: #000; font-weight: bold; box-shadow: 4px 4px 0px #000;">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  {% include 'chat/style_inc.html' %}
+</head>
+<body>
+
+  <div class="auth-card">
+    <h2 class="card-title">
+      <span>✨</span> Login
+    </h2>
+
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+
+      {% if form.errors %}
+        <ul class="errorlist">
+          <li>Your username and password didn't match. Please try again.</li>
+        </ul>
+      {% endif %}
+
+      <p>
+        <label for="id_username">Username</label>
+        <input type="text" name="username" required id="id_username" placeholder="Enter your username">
+      </p>
+
+      <p>
+        <label for="id_password">Password</label>
+        <input type="password" name="password" required id="id_password" placeholder="••••••••">
+      </p>
+
+      <div class="btn-submit-container">
+        <button type="submit" class="btn-submit">
+          <span>✨</span> Log In
+        </button>
+      </div>
+    </form>
+
+    <p class="auth-footer">
+      Don't have an account? <a href="{% url 'signup' %}">Sign up here</a>
+    </p>
+  </div>
+
+</body>
+</html>
