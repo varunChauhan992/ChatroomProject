@@ -61,10 +61,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from WebSocket client
     async def receive(self, text_data):
         data = json.loads(text_data)
-        message = data.get('message', '')
+        message = data.get('message', '').strip()[:1000]
         username = self.scope["user"].username
 
         if message:
+            saved = await self.save_message(message)
+            if saved is None:
+                return  # room no longer exists
+
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
